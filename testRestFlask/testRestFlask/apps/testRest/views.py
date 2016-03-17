@@ -14,6 +14,7 @@ api.init_app(testRest)
 parser = reqparse.RequestParser()
 parser.add_argument('username')
 parser.add_argument('password')
+parser.add_argument('expire',type=int)
 
 
 # Create a new resource
@@ -47,8 +48,13 @@ class UserRes(Resource):
 class AuthToken(Resource):
   @auth.login_required
   def get(self):
-    token = g.user.generate_auth_token(600)
-    return {'token': token.decode('ascii'), 'duration': 600}
+    data = parser.parse_args()
+    print data['expire']
+    exipery = 600
+    if data['expire'] != None:
+      exipery = data['expire']
+    token = g.user.generate_auth_token(exipery)
+    return {'token': token.decode('ascii'), 'duration': exipery}
 
 # Get a user resource after authentication
 class HResource(Resource):

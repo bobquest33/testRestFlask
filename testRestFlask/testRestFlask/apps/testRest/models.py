@@ -48,6 +48,7 @@ class User(db.Model):
         user = User.query.get(data['id'])
         return user
 
+# Static metod to verify either the authentication token or username password combination
 @auth.verify_password
 def verify_password(username_or_token, password):
 
