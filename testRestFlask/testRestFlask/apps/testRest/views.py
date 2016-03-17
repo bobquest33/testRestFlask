@@ -16,6 +16,7 @@ parser.add_argument('username')
 parser.add_argument('password')
 
 
+# Create a new resource
 class Users(Resource):
   def post(self):
     data = parser.parse_args()
@@ -33,6 +34,7 @@ class Users(Resource):
     db.session.commit()
     return {'username':user.username}
 
+#Get the User details
 class UserRes(Resource):
   def get(self,tid):
     user = User.query.get(tid)
@@ -41,12 +43,14 @@ class UserRes(Resource):
     return {'username': user.username}
 
 
+# Generate an authentication token
 class AuthToken(Resource):
   @auth.login_required
   def get(self):
     token = g.user.generate_auth_token(600)
     return {'token': token.decode('ascii'), 'duration': 600}
 
+# Get a user resource after authentication
 class HResource(Resource):
   @auth.login_required
   def get(self):
